@@ -2,6 +2,8 @@ package chatroom;
 
 import java.io.*;
 import java.net.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ClientThread extends Thread {
 	private String userName = null;
@@ -20,7 +22,7 @@ public class ClientThread extends Thread {
 	public void run() {
 		int maxCapacity = this.maxCapacity;
 		ClientThread[] threads = this.threads;
-		System.out.println("hello");
+		
 		try {
 			is = new DataInputStream(user.getInputStream());
 			os = new PrintStream(user.getOutputStream());
@@ -36,7 +38,7 @@ public class ClientThread extends Thread {
 			}
 			
 			// Welcome User
-			os.println("Welcome " + name + " to our multi-user chat room.\\nTo leave enter /quit in a new line.");
+			os.println("Welcome " + name + " to our multi-user chat room.\nTo leave enter /quit in a new line.");
 			synchronized(this) {
 				for(int i = 0; i < maxCapacity; i++) {
 					if(threads[i] != null && threads[i] == this) {
@@ -46,8 +48,10 @@ public class ClientThread extends Thread {
 				}
 				for(int j = 0; j < maxCapacity; j++) {
 					if (threads[j] != null && threads[j] != this) {
+						Date date = new Date();
+						SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
 			            threads[j].os.println("-------- A new user " + name
-			                + " entered the chat room !!! --------");
+			                + " entered the chat room " + sdf.format(date) + " --------");
 			          }
 				}
 			}
@@ -58,8 +62,10 @@ public class ClientThread extends Thread {
 				}
 				synchronized(this) {
 					for(int i = 0; i < maxCapacity; i++) {
+						Date date = new Date();
+						SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
 						if(threads[i] != null && threads[i].userName != null) {
-							threads[i].os.println("<" + name + "> " + line);
+							threads[i].os.println("<" + name + " " + sdf.format(date) + "> " + " " + line);
 						}
 					}
 				}

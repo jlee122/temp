@@ -66,7 +66,7 @@ public class Client {
 		}
 	}
 	
-	static class ChatGUI extends JFrame{
+	static class ChatGUI extends JFrame implements Observer{
 		/**
 		 * 
 		 */
@@ -78,6 +78,7 @@ public class Client {
 		
 		public ChatGUI(ChatClient chatClient) {
 			this.chatClient = chatClient;
+			chatClient.addObserver(this);
 			createChatRoom();
 		}
 		
@@ -113,14 +114,25 @@ public class Client {
                 }
             });
 		}
+		
+		/** Updates the UI depending on the Object argument */
+        public void update(Observable o, Object arg) {
+            final Object finalArg = arg;
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    textArea.append(finalArg.toString());
+                    textArea.append("\n");
+                }
+            });
+        }
 	}
 	
 	public static void main(String args[]) {
         String server = args[0];
-        int port = 3000;
+        int port = 2224;
         ChatClient access = new ChatClient();
         JFrame frame = new ChatGUI(access);
-        frame.setTitle("MyChatApp - connected to " + server + ":" + port);
+        frame.setTitle("Multi-User Chat App - connected to " + server + ":" + port);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);

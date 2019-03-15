@@ -13,7 +13,7 @@ public class Server {
 	private static final ClientThread[] threads = new ClientThread[maxCapacity];
 	
 	public static void main(String args[]) {
-		int portNumber = 3000;
+		int portNumber = 2224;
 		if(args.length < 1) {
 			System.out.println("Now using port number = " + portNumber);
 		} else {
@@ -47,5 +47,4 @@ public class Server {
 			}
 		}
 	}
-	
 }
